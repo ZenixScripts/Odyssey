@@ -1,0 +1,132 @@
+local OdysseyLib = {}
+
+function OdysseyLib.Initialize()
+    local Odyssey = Instance.new("ScreenGui")
+    local Container = Instance.new("Frame")
+    local TopNav = Instance.new("Frame")
+    local Left = Instance.new("Frame")
+    local odyname = Instance.new("TextLabel")
+    local UICorner = Instance.new("UICorner")
+    local Right = Instance.new("Frame")
+    local exit = Instance.new("ImageButton")
+    local UICorner_2 = Instance.new("UICorner")
+    local UICorner_3 = Instance.new("UICorner")
+    local LeftNav = Instance.new("Frame")
+    local UICorner_4 = Instance.new("UICorner")
+    local UICorner_5 = Instance.new("UICorner")
+    local Content = Instance.new("Frame")
+    local UICorner_6 = Instance.new("UICorner")
+
+    Odyssey.Name = "Odyssey"
+    Odyssey.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    Odyssey.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    Odyssey.ResetOnSpawn = false
+
+    Container.Name = "Container"
+    Container.Parent = Odyssey
+    Container.AnchorPoint = Vector2.new(0.5, 0.5)
+    Container.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Container.BackgroundTransparency = 1.000
+    Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Container.BorderSizePixel = 0
+    Container.Position = UDim2.new(0.503787816, 0, 0.499190927, 0)
+    Container.Size = UDim2.new(0.52272737, 0, 0.741100311, 0)
+
+    TopNav.Name = "TopNav"
+    TopNav.Parent = Container
+    TopNav.AnchorPoint = Vector2.new(0.5, 0.5)
+    TopNav.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TopNav.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TopNav.BorderSizePixel = 0
+    TopNav.Position = UDim2.new(0.499352098, 0, 0.0534934513, 0)
+    TopNav.Size = UDim2.new(1.00129545, 0, 0.109170303, 0)
+    TopNav.ZIndex = 2
+
+    Left.Name = "Left"
+    Left.Parent = TopNav
+    Left.AnchorPoint = Vector2.new(0.5, 0.5)
+    Left.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
+    Left.BackgroundTransparency = 1.000
+    Left.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Left.BorderSizePixel = 0
+    Left.Position = UDim2.new(0.253956378, 0, 0.505000174, 0)
+    Left.Size = UDim2.new(0.508649111, 0, 1, 0)
+
+    odyname.Name = "odyname"
+    odyname.Parent = Left
+    odyname.AnchorPoint = Vector2.new(0.5, 0.5)
+    odyname.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    odyname.BackgroundTransparency = 1.000
+    odyname.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    odyname.BorderSizePixel = 0
+    odyname.Position = UDim2.new(0.310593665, 0, 0.480000049, 0)
+    odyname.Size = UDim2.new(0.502848208, 0, 0.700000048, 0)
+    odyname.Font = Enum.Font.Unknown
+    odyname.Text = "Odyssey"
+    odyname.TextColor3 = Color3.fromRGB(51, 139, 255)
+    odyname.TextSize = 20.000
+    odyname.TextXAlignment = Enum.TextXAlignment.Left
+
+    UICorner.CornerRadius = UDim.new(0, 5)
+    UICorner.Parent = Left
+
+    Right.Name = "Right"
+    Right.Parent = TopNav
+    Right.AnchorPoint = Vector2.new(0.5, 0.5)
+    Right.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
+    Right.BackgroundTransparency = 1.000
+    Right.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Right.BorderSizePixel = 0
+    Right.Position = UDim2.new(0.754140496, 0, 0.504999995, 0)
+    Right.Size = UDim2.new(0.491719186, 0, 1, 0)
+
+    exit.Name = "exit"
+    exit.Parent = Right
+    exit.AnchorPoint = Vector2.new(0.5, 0.5)
+    exit.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    exit.BackgroundTransparency = 1.000
+    exit.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    exit.BorderSizePixel = 0
+    exit.Position = UDim2.new(0.887310743, 0, 0.480000317, 0)
+    exit.Size = UDim2.new(0.103819296, 0, 0.699999988, 0)
+    exit.Image = "rbxassetid://18482748008"
+
+    UICorner_2.CornerRadius = UDim.new(0, 5)
+    UICorner_2.Parent = Right
+
+    UICorner_3.CornerRadius = UDim.new(0, 5)
+    UICorner_3.Parent = TopNav
+
+    LeftNav.Name = "LeftNav"
+    LeftNav.Parent = Container
+    LeftNav.AnchorPoint = Vector2.new(0.5, 0.5)
+    LeftNav.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    LeftNav.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    LeftNav.BorderSizePixel = 0
+    LeftNav.Position = UDim2.new(0.107804373, 0, 0.5, 0)
+    LeftNav.Size = UDim2.new(0.218200132, 0, 1, 0)
+
+    UICorner_4.CornerRadius = UDim.new(0, 5)
+    UICorner_4.Parent = LeftNav
+
+    UICorner_5.CornerRadius = UDim.new(0, 5)
+    UICorner_5.Parent = Container
+
+    Content.Name = "Content"
+    Content.Parent = Container
+    Content.AnchorPoint = Vector2.new(0.5, 0.5)
+    Content.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    Content.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Content.BorderSizePixel = 0
+    Content.Position = UDim2.new(0.603368223, 0, 0.4994542, 0)
+    Content.Size = UDim2.new(0.793263614, 0, 1.0010916, 0)
+
+    UICorner_6.CornerRadius = UDim.new(0, 5)
+    UICorner_6.Parent = Content
+    
+    exit.MouseButton1Click:Connect(function()
+        Odyssey:Destroy()
+    end)
+end
+
+return OdysseyLib
