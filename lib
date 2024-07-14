@@ -1,6 +1,14 @@
 local OdysseyLib = {}
 
+local UIS = game:GetService("UserInputService")
+
 function OdysseyLib.Initialize()
+    local existingGui = game.Players.LocalPlayer.PlayerGui:FindFirstChild("Odyssey")
+    if existingGui then
+        print("Old GUI is being destroyed.")
+        existingGui:Destroy()
+    end
+    print("Loading new GUI.")
     local Odyssey = Instance.new("ScreenGui")
     local Container = Instance.new("Frame")
     local TopNav = Instance.new("Frame")
@@ -16,12 +24,15 @@ function OdysseyLib.Initialize()
     local UICorner_5 = Instance.new("UICorner")
     local Content = Instance.new("Frame")
     local UICorner_6 = Instance.new("UICorner")
+    local dragging
+    local dragStart
+    local startPos
 
     Odyssey.Name = "Odyssey"
     Odyssey.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     Odyssey.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     Odyssey.ResetOnSpawn = false
-
+    
     Container.Name = "Container"
     Container.Parent = Odyssey
     Container.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -29,9 +40,9 @@ function OdysseyLib.Initialize()
     Container.BackgroundTransparency = 1.000
     Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Container.BorderSizePixel = 0
-    Container.Position = UDim2.new(0.503787816, 0, 0.499190927, 0)
-    Container.Size = UDim2.new(0.52272737, 0, 0.741100311, 0)
-
+    Container.Position = UDim2.new(0.556179583, 0, 0.521844685, 0)
+    Container.Size = UDim2.new(0.417943716, 0, 0.607546985, 0)
+    
     TopNav.Name = "TopNav"
     TopNav.Parent = Container
     TopNav.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -41,7 +52,7 @@ function OdysseyLib.Initialize()
     TopNav.Position = UDim2.new(0.499352098, 0, 0.0534934513, 0)
     TopNav.Size = UDim2.new(1.00129545, 0, 0.109170303, 0)
     TopNav.ZIndex = 2
-
+    
     Left.Name = "Left"
     Left.Parent = TopNav
     Left.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -51,7 +62,7 @@ function OdysseyLib.Initialize()
     Left.BorderSizePixel = 0
     Left.Position = UDim2.new(0.253956378, 0, 0.505000174, 0)
     Left.Size = UDim2.new(0.508649111, 0, 1, 0)
-
+    
     odyname.Name = "odyname"
     odyname.Parent = Left
     odyname.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -66,10 +77,10 @@ function OdysseyLib.Initialize()
     odyname.TextColor3 = Color3.fromRGB(51, 139, 255)
     odyname.TextSize = 20.000
     odyname.TextXAlignment = Enum.TextXAlignment.Left
-
+    
     UICorner.CornerRadius = UDim.new(0, 5)
     UICorner.Parent = Left
-
+    
     Right.Name = "Right"
     Right.Parent = TopNav
     Right.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -79,7 +90,7 @@ function OdysseyLib.Initialize()
     Right.BorderSizePixel = 0
     Right.Position = UDim2.new(0.754140496, 0, 0.504999995, 0)
     Right.Size = UDim2.new(0.491719186, 0, 1, 0)
-
+    
     exit.Name = "exit"
     exit.Parent = Right
     exit.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -90,13 +101,13 @@ function OdysseyLib.Initialize()
     exit.Position = UDim2.new(0.887310743, 0, 0.480000317, 0)
     exit.Size = UDim2.new(0.103819296, 0, 0.699999988, 0)
     exit.Image = "rbxassetid://18482748008"
-
+    
     UICorner_2.CornerRadius = UDim.new(0, 5)
     UICorner_2.Parent = Right
-
+    
     UICorner_3.CornerRadius = UDim.new(0, 5)
     UICorner_3.Parent = TopNav
-
+    
     LeftNav.Name = "LeftNav"
     LeftNav.Parent = Container
     LeftNav.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -105,13 +116,13 @@ function OdysseyLib.Initialize()
     LeftNav.BorderSizePixel = 0
     LeftNav.Position = UDim2.new(0.107804373, 0, 0.5, 0)
     LeftNav.Size = UDim2.new(0.218200132, 0, 1, 0)
-
+    
     UICorner_4.CornerRadius = UDim.new(0, 5)
     UICorner_4.Parent = LeftNav
-
+    
     UICorner_5.CornerRadius = UDim.new(0, 5)
     UICorner_5.Parent = Container
-
+    
     Content.Name = "Content"
     Content.Parent = Container
     Content.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -120,13 +131,98 @@ function OdysseyLib.Initialize()
     Content.BorderSizePixel = 0
     Content.Position = UDim2.new(0.603368223, 0, 0.4994542, 0)
     Content.Size = UDim2.new(0.793263614, 0, 1.0010916, 0)
-
+    
     UICorner_6.CornerRadius = UDim.new(0, 5)
     UICorner_6.Parent = Content
+
+    local function updateDrag(input)
+        local delta = input.Position - dragStart
+        Container.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+    
+    TopNav.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = Container.Position
+    
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+    
+    TopNav.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            updateDrag(input)
+        end
+    end)
     
     exit.MouseButton1Click:Connect(function()
         Odyssey:Destroy()
     end)
+end
+
+function OdysseyLib.AddTab(text)
+    local tabholder = Instance.new("Frame")
+    local tabOuter = Instance.new("Frame")
+    local indicator = Instance.new("Frame")
+    local TextButton = Instance.new("TextButton")
+    local UIListLayout = Instance.new("UIListLayout")
+    local tabOuter_2 = Instance.new("Frame")
+    local indicator_2 = Instance.new("Frame")
+    local TextButton_2 = Instance.new("TextButton")
+    local tabOuter_3 = Instance.new("Frame")
+    local indicator_3 = Instance.new("Frame")
+    local TextButton_3 = Instance.new("TextButton")
+
+    tabholder.Name = "tabholder"
+    tabholder.Parent = game.StarterGui.Odyssey.Container.LeftNav
+    tabholder.AnchorPoint = Vector2.new(0.5, 0.5)
+    tabholder.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
+    tabholder.BackgroundTransparency = 1.000
+    tabholder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    tabholder.BorderSizePixel = 0
+    tabholder.Position = UDim2.new(0.501838744, 0, 0.556916296, 0)
+    tabholder.Size = UDim2.new(0.730837703, 0, 0.801265836, 0)
+
+    tabOuter.Name = "OTab" .. text
+    tabOuter.Parent = tabholder
+    tabOuter.AnchorPoint = Vector2.new(0.5, 0.5)
+    tabOuter.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    tabOuter.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    tabOuter.BorderSizePixel = 0
+    tabOuter.Position = UDim2.new(0.483442932, 0, 0.0442606322, 0)
+    tabOuter.Size = UDim2.new(0.966885865, 0, 0.0938321948, 0)
+
+    indicator.Name = "indicator"
+    indicator.Parent = tabOuter
+    indicator.AnchorPoint = Vector2.new(0.5, 0.5)
+    indicator.BackgroundColor3 = Color3.fromRGB(51, 139, 255)
+    indicator.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    indicator.BorderSizePixel = 0
+    indicator.Position = UDim2.new(1.0170697, 0, 0.500000954, 0)
+    indicator.Size = UDim2.new(0.0341398381, 0, 1.00000191, 0)
+
+    TextButton.Parent = tabOuter
+    TextButton.AnchorPoint = Vector2.new(0.5, 0.5)
+    TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TextButton.BackgroundTransparency = 1.000
+    TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextButton.BorderSizePixel = 0
+    TextButton.Position = UDim2.new(0.505383372, 0, 0.51660651, 0)
+    TextButton.Size = UDim2.new(0.812238574, 0, 0.53321296, 0)
+    TextButton.Font = Enum.Font.Unknown
+    TextButton.Text = text
+    TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextButton.TextSize = 14.000
+    TextButton.TextXAlignment = Enum.TextXAlignment.Left
+
+    UIListLayout.Parent = tabholder
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0.0350000001, 0)
 end
 
 return OdysseyLib
